@@ -8,7 +8,7 @@ class Home extends React.Component
             <div className="Home">
                 <h1>Petful</h1>
                 <p>Petful is an adoption agency where you can adopt the most recent pet.</p>
-                <Link to="/adopt">Adopt a pet</Link>
+                <Link to="/line">Adopt a pet</Link>
             </div>
         )
     }

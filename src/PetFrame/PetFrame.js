@@ -2,6 +2,8 @@ import React from 'react';
 
 import config from '../config';
 
+import './PetFrame.css';
+
 class PetFrame extends React.Component
 {
 
@@ -40,7 +42,7 @@ class PetFrame extends React.Component
                 <p>Gender: {this.props.pet.gender}</p>
                 <p>Description: {this.props.pet.description}</p>
                 <p>Breed: {this.props.pet.breed}</p>
-                {this.state.adopted ? <p>Adopted!</p> : <button onClick={e => this.adopt(this.props.type)}>Adopt</button>}
+                {this.state.adopted ? <p>Adopted!</p> : <button onClick={e => this.adopt(this.props.type)} disabled={!this.props.atFront}>Adopt</button>}
             </div>
         );
     }
