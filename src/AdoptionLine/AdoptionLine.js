@@ -14,6 +14,10 @@ class AdoptionLine extends React.Component
             cat: null,
             submitted: false,
             atFront: false,
+            canAdoptDog: false,
+            hasAdoptedDog: false,
+            hasAdoptedCat: false,
+            canAdoptCat: false,
             name: {
                 value: ''
             }
@@ -41,17 +45,27 @@ class AdoptionLine extends React.Component
         return fetch(apistr).then(
             res => res.json()
         ).then(data => {
-            this.setState({people: data, atFront: data[0] === this.state.name.value})
-            return data
+            if(data[0] === this.state.name.value) {
+                console.log('At front');
+                this.setState({
+                    people: data,
+                    canAdoptDog: true,
+                    canAdoptCat: true,
+                    atFront: true
+                });
+            } else {
+                this.setState({people: data});    
+            }
+            return data;
         })
     }
 
     updateTickingToFront = () => {
         this.fetchPeople(true).then(data => {
-            if(!this.state.atFront) {
-                setTimeout(this.updateTickingToFront, 5000);
-            } else {
+            if(this.state.atFront) {
                 setTimeout(this.updateTickingToBack, 5000);
+            } else {
+                setTimeout(this.updateTickingToFront, 5000);
             }
         })
         this.adoptDogAndCat().then(data => {
@@ -102,6 +116,46 @@ class AdoptionLine extends React.Component
         })
     }
 
+    checkAndRemovePersonOnAdoption = () => {
+        if(this.state.people[0] === this.state.name.value) {
+            this.fetchPeople(true);
+        }
+    }
+
+    adoptDog = () => {
+        console.log('Adopting a dog');
+        fetch(`${config.API_ENDPOINT}/pets`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'DELETE',
+            body: JSON.stringify({type: 'dog'})
+        }).then(res => res.json()).then(data => {
+            if(data.status === 0) {
+                this.setState({hasAdoptedDog: true, canAdoptDog: false})
+                this.fetchDogAndCat();
+                this.checkAndRemovePersonOnAdoption();
+            }
+        })
+    }
+
+    adoptCat = () => {
+        console.log('Adopting a cat');
+        fetch(`${config.API_ENDPOINT}/pets`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'DELETE',
+            body: JSON.stringify({type: 'cat'})
+        }).then(res => res.json()).then(data => {
+            if(data.status === 0) {
+                this.setState({hasAdoptedCat: true, canAdoptCat: false})
+                this.fetchDogAndCat();
+                this.checkAndRemovePersonOnAdoption();
+            }
+        })
+    }
+
     componentDidMount() {
         this.fetchDogAndCat();
         this.fetchPeople();
@@ -111,6 +165,10 @@ class AdoptionLine extends React.Component
         return (
             <div className="AdoptionLine">
                 <h1>Adoption Line</h1>
+                {this.state.hasAdoptedDog ? 
+                <h1>You adopted a dog!</h1> : ''}
+                {this.state.hasAdoptedCat ? 
+                <h1>You adopted a cat!</h1> : ''}
                 <ul>
                 {this.state.people.map((person) => {
                     return <li key={person}>{person}</li>
@@ -124,7 +182,13 @@ class AdoptionLine extends React.Component
                     </>
                 }
                 </ul>
-                <AdoptAPet dog={this.state.dog} cat={this.state.cat} atFront={this.state.atFront} />
+                <AdoptAPet 
+                    dog={this.state.dog} 
+                    cat={this.state.cat} 
+                    canAdoptDog={this.state.canAdoptDog} 
+                    canAdoptCat={this.state.canAdoptCat}
+                    adoptDog={this.adoptDog}
+                    adoptCat={this.adoptCat} />
             </div>
         )
     }

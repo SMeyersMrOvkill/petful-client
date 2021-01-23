@@ -14,21 +14,6 @@ class PetFrame extends React.Component
         }
     }
 
-    adopt = (type) => {
-        console.log('Adopting a ' + type);
-        fetch(`${config.API_ENDPOINT}/pets`, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'DELETE',
-            body: JSON.stringify({type: type})
-        }).then(res => res.json()).then(data => {
-            if(data.status === 0) {
-                this.setState({adopted: true})
-            }
-        })
-    }
-
     render() {
         if(!this.props.pet || this.props.pet == {}) {
             return (<div className="PetFrame"></div>);
@@ -42,7 +27,7 @@ class PetFrame extends React.Component
                 <p>Gender: {this.props.pet.gender}</p>
                 <p>Description: {this.props.pet.description}</p>
                 <p>Breed: {this.props.pet.breed}</p>
-                {this.state.adopted ? <p>Adopted!</p> : <button onClick={e => this.adopt(this.props.type)} disabled={!this.props.atFront}>Adopt</button>}
+                {this.state.adopted ? <p>Adopted!</p> : <button onClick={e => this.props.adopt(this.props.type)} disabled={!this.props.atFront}>Adopt</button>}
             </div>
         );
     }

@@ -7,6 +7,7 @@ class Home extends React.Component
         return (
             <div className="Home">
                 <h1>Petful</h1>
+                <img src="https://i.pinimg.com/originals/29/ce/07/29ce07338b632a3131d592ae76749879.jpg" width="300" />
                 <p>Petful is an adoption agency where you can adopt the most recent pet.</p>
                 <Link to="/line">Adopt a pet</Link>
                 <p>To use the app, first click the link above.</p>

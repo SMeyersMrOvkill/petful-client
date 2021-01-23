@@ -2,6 +2,10 @@
 
 A working version of this can be found here: https://petful-client-template-rho.vercel.app/
 
+The client repository can be found here: https://github.com/SMeyersMrOvkill/petful-client
+
+The server repository can be found here: https://github.com/SMeyersMrOvkill/petful-server
+
 To use the app, first click the link above.
 
 After you get to the page, it will show you the current state of pet adoption.
